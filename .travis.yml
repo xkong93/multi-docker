@@ -1,0 +1,22 @@
+language: generic 
+sudo: required
+services:
+    - docker
+
+before_install:
+    # -t means tag
+    - docker build -t xkong/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+    - docker run -e CI=true xkong/react-test npm test
+
+after_success:
+    - docker build -t xkong/multi-client ./client
+    - docker build -t xkong/multi-nginx ./nginx
+    - docker build -t xkong/multi-server ./server
+    - docker build -t xkong/multi-worker ./worker
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    - docker push xkong/multi-client
+    - docker push xkong/multi-nginx
+    - docker push xkong/multi-server
+    - docker push xkong/multi-worker
