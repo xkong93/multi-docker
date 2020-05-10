@@ -5,18 +5,18 @@ services:
 
 before_install:
     # -t means tag
-    - docker build -t xkong/react-test -f ./client/Dockerfile.dev ./client
+    - docker build -t xkong93/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-    - docker run -e CI=true xkong/react-test npm test
+    - docker run -e CI=true xkong93/react-test npm test
 
 after_success:
-    - docker build -t xkong/multi-client ./client
-    - docker build -t xkong/multi-nginx ./nginx
-    - docker build -t xkong/multi-server ./server
-    - docker build -t xkong/multi-worker ./worker
+    - docker build -t xkong93/multi-client ./client
+    - docker build -t xkong93/multi-nginx ./nginx
+    - docker build -t xkong93/multi-server ./server
+    - docker build -t xkong93/multi-worker ./worker
     - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-    - docker push xkong/multi-client
-    - docker push xkong/multi-nginx
-    - docker push xkong/multi-server
-    - docker push xkong/multi-worker
+    - docker push xkong93/multi-client
+    - docker push xkong93/multi-nginx
+    - docker push xkong93/multi-server
+    - docker push xkong93/multi-worker
